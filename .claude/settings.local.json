@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose config:*)",
+      "Bash(docker compose:*)",
+      "Bash(python3:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(git -C \"/Users/satvikjain/Downloads/Resume personalisation\" log --oneline -15)",
+      "Bash(xargs ls:*)",
+      "Bash(grep:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

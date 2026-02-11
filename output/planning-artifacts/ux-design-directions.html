@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sync UX Design Directions - Final Precision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #006666;
+            --primary-light: #2699B8;
+            --gold: #FFD700;
+            --coral: #E87D63;
+            --success-blue: #3b82f6;
+            --background: #FDFCFB; 
+            --foreground: #202938;
+            --muted: #F0F5F5;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .resume-serif {
+            font-family: 'EB Garamond', serif;
+        }
+        
+        /* CONSISTENT INDENTATION + FULL-WIDTH STRETCH */
+        .rectangular-block-container {
+            width: 100%;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px; /* Fixed gap for consistent bullet-to-text distance */
+            padding-left: 12px; /* Indent for all bullets */
+        }
+
+        .bullet-point {
+            flex: 0 0 10px;
+            font-size: 14px;
+            margin-top: -1px;
+            text-align: center;
+        }
+
+        .rectangular-text {
+            flex-grow: 1;
+            text-align: justify;
+            text-align-last: justify;
+            line-height: 1.1;
+            font-size: 13px;
+        }
+
+        .rectangular-text::after {
+            content: "";
+            display: inline-block;
+            width: 100%;
+        }
+
+        .apple-shadow {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+        .glass-sidebar {
+            background: rgba(240, 245, 245, 0.8);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+        .gold-badge {
+            background: linear-gradient(135deg, #FFD700 0%, #FFB900 100%);
+            color: #4A3B00;
+        }
+        .mq-card {
+            border-left: 4px solid var(--primary);
+            background: white;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-100 px-8 py-4 flex justify-between items-center apple-shadow">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-[#006666] flex items-center justify-center text-white font-bold">S</div>
+            <span class="text-xl font-semibold tracking-tight text-[#202938]">Sync</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="bg-[#006666] text-white px-5 py-2.5 rounded-full text-sm font-medium hover:scale-105 transition-all apple-shadow">
+                Export to Overleaf
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex h-[calc(100vh-72px)]">
+        <!-- Sidebar -->
+        <aside class="w-80 glass-sidebar p-6 overflow-y-auto">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest">Precision Sync</h3>
+                    <span class="gold-badge text-[9px] px-2 py-0.5 rounded-full font-bold">MASTER</span>
+                </div>
+                
+                <div class="p-4 mq-card rounded-xl apple-shadow mb-4">
+                    <h4 class="text-[10px] font-bold text-[#006666] uppercase mb-1">MQs Check</h4>
+                    <p class="text-[11px] font-medium text-gray-700">✓ Distributed Systems (5+ yrs)</p>
+                    <p class="text-[11px] font-medium text-gray-700">✓ Python Mastery</p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-sm font-semibold mb-3">X-Y-Z Optimizer</h3>
+                    <div class="p-3 bg-white rounded-xl border border-blue-50 apple-shadow text-xs">
+                         <p class="text-gray-400 mb-2">Refining Bullet 2...</p>
+                         <p class="font-medium">"Accomplished [X] as measured by [Y]..."</p>
+                         <div class="mt-3 flex gap-2">
+                             <div class="h-1 flex-1 bg-blue-500 rounded"></div>
+                             <div class="h-1 flex-1 bg-gray-200 rounded"></div>
+                             <div class="h-1 flex-1 bg-gray-200 rounded"></div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Canvas -->
+        <section class="flex-1 bg-[#F5F5F7] p-12 overflow-y-auto flex justify-center">
+            <div class="bg-white w-[850px] min-h-[1100px] shadow-2xl p-20 flex flex-col items-center">
+                <div class="w-full text-center mb-10">
+                    <h1 class="resume-serif text-4xl font-light tracking-[0.3em] uppercase">Satvik Jain</h1>
+                    <p class="resume-serif text-[11px] text-gray-400 mt-4 tracking-[0.2em]">BANGALORE, IN • +91 9876543210 • SATVIKJAIN@EXAMPLE.COM</p>
+                </div>
+
+                <!-- SURGICAL SYMMETRY -->
+                <div class="w-full">
+                    <h2 class="resume-serif border-b border-black text-xs font-bold uppercase pb-1 mb-6 tracking-widest">Technical Experience</h2>
+                    
+                    <div class="mb-8">
+                        <div class="flex justify-between items-baseline mb-2">
+                            <h3 class="resume-serif font-bold text-[14px]">Lead Software Engineer — <span class="text-[#006666]">Sync AI Technologies</span></h3>
+                            <span class="resume-serif text-xs italic">Feb 2024 — Present</span>
+                        </div>
+                        
+                        <!-- ALL BULLETS NOW HAVE IDENTICAL PADDING AND GAP -->
+                        <div class="space-y-3">
+                            <div class="rectangular-block-container">
+                                <span class="bullet-point">•</span>
+                                <span class="resume-serif rectangular-text text-[#202938]">Built a surgical tailoring engine as measured by 100% margin alignment for professional exports.</span>
+                            </div>
+                            <!-- Second bullet vertical/horizontal position is now IDENTICAL to neighbors -->
+                            <div class="rectangular-block-container bg-blue-50/20 border-l border-blue-300">
+                                <span class="bullet-point">•</span>
+                                <span class="resume-serif rectangular-text text-[#202938]">Optimized JD match scores by 45% as measured by ATS benchmarks through proprietary AI probing loops.</span>
+                            </div>
+                            <div class="rectangular-block-container">
+                                <span class="bullet-point">•</span>
+                                <span class="resume-serif rectangular-text text-[#202938]">Reduced latency to 200ms by scaling local persistence on Apple Silicon for surgical real-time edits.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

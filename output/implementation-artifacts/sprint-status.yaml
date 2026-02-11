@@ -1,0 +1,62 @@
+# generated: 2026-02-12
+# project: Resume personalisation
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: /Users/satvikjain/Downloads/Resume personalisation/output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+generated: 2026-02-12
+project: Resume personalisation
+project_key: NOKEY
+tracking_system: file-system
+story_location: /Users/satvikjain/Downloads/Resume personalisation/output/implementation-artifacts
+
+development_status:
+  epic-1: done
+  1-1-core-environment-docker-apple-silicon-setup: done
+  1-2-database-connection-basic-sqlmodel-setup: done
+  1-3-secure-dashboard-login-jwt: done
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-add-new-job-listing-manual: backlog
+  2-2-jobs-management-dashboard: backlog
+  2-3-delete-or-archive-job: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-resume-pdf-upload-text-parsing: backlog
+  3-2-ai-driven-project-skill-extraction: backlog
+  3-3-personal-profile-editor-manual-tweak: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-ai-probing-questions-the-gap-finder: backlog
+  4-2-draft-tailored-bullet-points: backlog
+  4-3-pixel-proxy-width-validation-the-virtual-ruler: backlog
+  4-4-one-page-gravity-re-ordering: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-save-final-tailoring-session: backlog
+  5-2-overleaf-bridge-direct-latex-export: backlog
+  5-3-automated-weekly-backups: backlog
+  5-4-n8n-workflow-sync-post-finalization: backlog
+  epic-5-retrospective: optional
