@@ -3,13 +3,14 @@ FROM oven/bun:1 AS build-stage
 
 WORKDIR /app
 
-COPY package.json bun.lock /app/
+COPY package.json /app/
+COPY bun.lock /app/
 
 COPY frontend/package.json /app/frontend/
 
 WORKDIR /app/frontend
 
-RUN bun install
+RUN bun install --frozen-lockfile || bun install
 
 COPY ./frontend /app/frontend
 ARG VITE_API_URL

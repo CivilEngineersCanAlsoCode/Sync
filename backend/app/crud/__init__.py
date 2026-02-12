@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import Item, ItemCreate, Job, JobCreate, User, UserCreate, UserUpdate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -67,3 +67,21 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+def create_job(*, session: Session, job_in: JobCreate, owner_id: uuid.UUID) -> Job:
+    db_job = Job.model_validate(job_in, update={"owner_id": owner_id, "status": "Applied"})
+    session.add(db_job)
+    session.commit()
+    session.refresh(db_job)
+    return db_job
+
+
+def get_jobs(*, session: Session, owner_id: uuid.UUID, skip: int = 0, limit: int = 100) -> list[Job]:
+    statement = select(Job).where(Job.owner_id == owner_id).offset(skip).limit(limit)
+    return session.exec(statement).all()
+
+
+def get_job(*, session: Session, job_id: uuid.UUID) -> Job | None:
+    return session.get(Job, job_id)
+# Ye functions Job model ke liye standard CRUD operations provide karte hain.

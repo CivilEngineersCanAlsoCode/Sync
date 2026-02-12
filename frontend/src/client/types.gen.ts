@@ -36,6 +36,39 @@ export type ItemUpdate = {
     description?: (string | null);
 };
 
+export type JobCreate = {
+    title: string;
+    company: string;
+    jd_text: string;
+    url?: (string | null);
+    status?: string;
+};
+
+export type JobPublic = {
+    title: string;
+    company: string;
+    jd_text: string;
+    url?: (string | null);
+    status?: string;
+    id: string;
+    owner_id: string;
+    created_at: (string | null);
+    updated_at: (string | null);
+};
+
+export type JobsPublic = {
+    data: Array<JobPublic>;
+    count: number;
+};
+
+export type JobUpdate = {
+    title?: (string | null);
+    company?: (string | null);
+    jd_text?: (string | null);
+    url?: (string | null);
+    status?: (string | null);
+};
+
 export type Message = {
     message: string;
 };
@@ -141,6 +174,38 @@ export type ItemsDeleteItemData = {
 
 export type ItemsDeleteItemResponse = (Message);
 
+export type JobsReadJobsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type JobsReadJobsResponse = (JobsPublic);
+
+export type JobsCreateJobData = {
+    requestBody: JobCreate;
+};
+
+export type JobsCreateJobResponse = (JobPublic);
+
+export type JobsReadJobData = {
+    id: string;
+};
+
+export type JobsReadJobResponse = (JobPublic);
+
+export type JobsUpdateJobData = {
+    id: string;
+    requestBody: JobUpdate;
+};
+
+export type JobsUpdateJobResponse = (JobPublic);
+
+export type JobsDeleteJobData = {
+    id: string;
+};
+
+export type JobsDeleteJobResponse = (Message);
+
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;
 };
@@ -233,4 +298,6 @@ export type UtilsTestEmailData = {
 
 export type UtilsTestEmailResponse = (Message);
 
-export type UtilsHealthCheckResponse = (boolean);
+export type UtilsHealthCheckResponse = ({
+    [key: string]: (string);
+});
