@@ -20,12 +20,14 @@ WORKDIR /app/
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#using-the-environment
 ENV PATH="/app/.venv/bin:$PATH"
 
+# Add backend to Python path for module imports
+ENV PYTHONPATH="/app/backend:$PYTHONPATH"
+
 # Install dependencies
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-workspace --package app
+    --mount=type=bind,source=backend/pyproject.toml,target=pyproject.toml \
+    uv sync --no-install-workspace
 
 COPY ./backend/scripts /app/backend/scripts
 
@@ -36,9 +38,8 @@ COPY ./backend/app /app/backend/app
 # Sync the project
 # Ref: https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --package app
+    --mount=type=bind,source=backend/pyproject.toml,target=pyproject.toml \
+    uv sync
 
 WORKDIR /app/backend/
 

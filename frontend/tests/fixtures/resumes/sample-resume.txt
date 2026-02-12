@@ -1,0 +1,26 @@
+John Doe
+Software Engineer | john@example.com | LinkedIn: linkedin.com/in/johndoe
+
+EXPERIENCE
+
+Senior Software Developer | Tech Corp | 2020-2023
+- Built scalable microservices using Python, FastAPI, and Docker
+- Led team of 5 engineers delivering 3 major features
+- Improved API response time by 40% through optimization
+- Implemented CI/CD pipelines reducing deployment time by 60%
+
+Software Engineer | StartupXYZ | 2018-2020
+- Developed full-stack applications with React and Node.js
+- Designed and implemented PostgreSQL database schemas
+- Collaborated with product team on feature specifications
+
+SKILLS
+
+Backend: Python, FastAPI, Django, Node.js, PostgreSQL, MongoDB
+Frontend: React, TypeScript, TanStack Query, Tailwind CSS
+DevOps: Docker, Kubernetes, GitHub Actions, AWS
+Tools: Git, VS Code, Postman, Figma
+
+EDUCATION
+
+B.S. Computer Science | University of Technology | 2014-2018

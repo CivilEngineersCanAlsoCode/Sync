@@ -1,279 +1,263 @@
-stepsCompleted: [1, 2, 3, 4]
-workflowType: "epics-and-stories"
-lastStep: 4
-status: "complete"
-completedAt: "2026-02-11"
+---
+stepsCompleted:
+  [
+    "step-01-validate-prerequisites",
+    "step-02-design-epics",
+    "step-03-create-stories",
+    "step-04-final-validation",
+  ]
 inputDocuments:
-[
-"output/planning-artifacts/prd.md",
-"output/planning-artifacts/architecture.md"
-]
-
+  - output/planning-artifacts/prd.md
+  - output/planning-artifacts/architecture.md
+  - output/planning-artifacts/ux-design-specification.md
+  - User_Prompt_New_Requirements
 ---
 
-# Resume personalisation (Sync) - Epic Breakdown
+# Resume personalisation - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for Resume personalisation (Sync), decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
+This document provides the complete epic and story breakdown for Resume personalisation, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
 
 ## Requirements Inventory
 
 ### Functional Requirements
 
-FR1: User job ki details (Title, Company, JD text) manually save kar sakta hai.
-FR2: User apni saved jobs ki list manage kar sakta hai.
-FR3: User base resume PDF upload karke projects extract kar sakta hai.
-FR4: User apne profile data ko manually edit ya add kar sakta hai.
-FR5: AI user se project-specific "Mandatory Probing Questions" pooch sakta hai.
-FR6: User ke answers ke basis par AI testable bullet points draft karega.
-FR7: AI bullet points ko automatically re-order (Gravity Logic) karega.
-FR8: System har bullet ki width LaTeX font ke mutabiq check karke 1.0-2.0 lines ke beech rakhega.
-FR9: Saara data locally SQLite/CSV mein store hoga aur weekly backup hoga.
-FR10: User final resume ko direct Overleaf par export kar sakta hai.
+- **FR1 (Modified):** User creates a Job with Title, Company, Job Link, and JD. Default status is "Draft". (Source: User Prompt/PRD)
+- **FR2 (Modified):** User views Jobs Dashboard. Columns: Title, Company, Job Link, Status. Actions: "View job details", "Delete job". No "Edit" or "Copy ID". (Source: User Prompt)
+- **FR3 (Modified):** User uploads a single "Standard Base Resume" in Profile Settings. This serves as the base for all tailoring. (Source: User Prompt)
+- **FR4 (New):** Clicking "Job Name" in Dashboard redirects to an "Analysis Page" where a questionnaire based on JD & Resume is presented. (Source: User Prompt)
+- **FR5:** System analyzes JD and Base Resume to generate "Mandatory Probing Questions". (Source: PRD)
+- **FR6:** User answers probing questions; AI generates tailored bullet points. (Source: PRD)
+- **FR7:** AI automatically re-orders bullet points (Gravity Logic). (Source: PRD)
+- **FR8:** System enforces 1.0-2.0 line width (LaTeX layout) via "Precision-Fit" algorithm. (Source: PRD/Arch)
+- **FR9 (Modified):** "Resumes" screen displays _only_ customized resumes linked to jobs. Actions: "Download", "Copy Overleaf Link". No upload button here. (Source: User Prompt)
+- **FR10:** User can export the final resume to Overleaf. (Source: PRD)
+- **FR11:** All data stored locally (SQLite) and backed up weekly. (Source: PRD)
 
 ### NonFunctional Requirements
 
-NFR1: Performance - JD processing aur initial tailoring questions < 30 seconds mein hone chahiye.
-NFR2: Performance - Total Loop (from Job to LaTeX) < 2 minutes hona chahiye.
-NFR3: Privacy - 100% local-only routing, PII data strictly local except for AI API calls.
-NFR4: Reliability - Multi-turn session state persistence taaki refresh par progress lost na ho.
-NFR5: Reliability - Graceful degradation (user-friendly Romanised Hindi error messages).
+- **NFR1 (Performance):** JD processing and initial questions < 30 seconds.
+- **NFR2 (Performance):** Total Tailoring Loop < 2 minutes.
+- **NFR3 (Privacy):** Local-First Architecture. No PII sent to cloud except AI API.
+- **NFR4 (Reliability):** Multi-turn session state persistence.
+- **NFR5 (UX):** Achromatic "Surgical" UI with Teal accents.
 
 ### Additional Requirements
 
-- **Starter Template:** Full-Stack FastAPI Template (Tiangolo) based on Docker & Postgres.
-- **Coding Pattern:** Romanised Hindi comments hamesha code block ke **NEECHE** honge.
-- **Error Format:** `{ "error": "Romanised Hindi Msg", "code": "TECH_CODE" }`.
-- **Validation Engine:** Dedicated "Pixel Proxy" service using Pillow/FontTools for character-width check.
-- **Gravity Rule:** Vertical height tracking to ensure one-page resume guarantee.
-- **UX Pattern:** Real-time AI result streaming for better engagement.
-- **Authentication:** JWT/OAuth2 login for personal dashboard security.
-- **Persistence:** n8n workflow for background Q&A updates.
+- **Tech Stack:** FastAPI, React, SQLModel, PostgreSQL, Docker.
+- **Architecture:** "Romanised Hindi" comments rule for all code.
+- **Architecture:** "Pixel Proxy" service for precise text width calculation.
+- **UX:** "Rectangular Block" validation visual feedback.
+- **UX:** "Desktop-First" for editing, "Mobile-First" for review.
+- **Database:** Remove existing resumes (Cleanup Done).
+- **Startup:** Nginx/Traefik for routing (implied from existing setup).
 
 ### FR Coverage Map
 
-FR1: Epic 2 - Job Management (Manual Save)
-FR2: Epic 2 - Job Management (List/Manage)
-FR3: Epic 3 - Profile & Career Data (Resume Parsing)
-FR4: Epic 3 - Profile & Career Data (Manual Edit)
-FR5: Epic 4 - Personalisation Engine (AI Probing)
-FR6: Epic 4 - Personalisation Engine (AI Bullet Drafting)
-FR7: Epic 4 - Personalisation Engine (Gravity Re-ordering)
-FR8: Epic 4 - Personalisation Engine (Pixel Width Validation)
-FR9: Epic 5 - Export & Persistence (Data Persistence & Backups)
-FR10: Epic 5 - Export & Persistence (Overleaf Bridge)
+FR1: Epic 1 - Job Creation
+FR2: Epic 1 - Dashboard & Actions
+FR3: Epic 2 - Base Resume Upload
+FR4: Epic 1 - Navigation to Analysis
+FR5: Epic 2 - JD Analysis & Probing Questions
+FR6: Epic 3 - AI Tailoring
+FR7: Epic 3 - Gravity Re-ordering
+FR8: Epic 3 - Layout Precision
+FR9: Epic 4 - Tailored Resume List
+FR10: Epic 4 - Overleaf Export
+FR11: Epic 1 - Data Persistence
 
 ## Epic List
 
-### Epic 1: Full-Stack Project Foundation
+### Epic 1: Job Management & Dashboard
 
-Humne **Full-Stack Titan** template setup kar liya hai. Is epic mein environment ko Apple Silicon (M1/M2/M3) ke liye optimize kiya jayega aur JWT authentication enable karenge taaki dashboard secure rahe.
-**FRs covered:** N/A (Functional baseline)
+**Goal:** Enable users to manage their job applications and track their progress.
+**FRs covered:** FR1, FR2, FR4, FR11.
+**Implementation Notes:**
 
-#### Story 1.1: Core Environment & Docker Apple Silicon Setup
+- Create Job (Title, Company, Link, JD) -> Status: Draft.
+- Dashboard with columns: Title, Company, Link, Status.
+- Actions: View Job Details, Delete Job.
+- Click Job Name -> Redirect to Analysis Page.
+- Local SQLite storage.
 
-As a developer, I want to initialize the project with Tiangolo's FastAPI template and optimize it for Apple Silicon, so that the local development environment is stable and fast.
+### Epic 2: Resume Profile & Analysis
 
-**Acceptance Criteria:**
+**Goal:** Establish a single truth source for the user's career history and analyze it against job descriptions.
+**FRs covered:** FR3, FR5.
+**Implementation Notes:**
 
-- **Given** Docker Desktop run ho raha hai M1/M2/M3 Mac par
-- **When** main `docker-compose up` command run karta hun
-- **Then** backend, frontend, aur postgres containers bina kisi architecture mismatch error ke start hone chahiye.
-- **And** `docker-compose.yml` file ke **NEECHE** ek Romanised Hindi comment hona chahiye jo is config ka purpose samjhaye.
+- Profile Settings: Upload "Standard Base Resume" (One-time).
+- Analysis Page: Verify "Mandatory Probing Questions" generated from JD + Base Resume.
 
-#### Story 1.2: Database Connection & Basic SQLModel Setup
+### Epic 3: Surgical Tailoring Loop
 
-As a system, I want to establish a reliable connection to PostgreSQL using SQLModel, so that career data (JDs and Resumes) can be stored persistently.
+**Goal:** Empower users to tailor their resume bullets precisely to the job description using AI.
+**FRs covered:** FR6, FR7, FR8.
+**Implementation Notes:**
 
-**Acceptance Criteria:**
+- Interactive Questionnaire (Probing Questions).
+- AI Bullet Generation & Gravity Re-ordering.
+- "Precision-Fit" Algorithm (1.0 - 2.0 lines LaTeX width).
+- Rectangular Block Validation.
 
-- **Given** Postgres container healthy state mein hai
-- **When** backend main entry point launch hota hai
-- **Then** "Database Connected" ka message logs mein dikhna chahiye.
-- **And** agar connection fail ho, toh error message format `{ "error": "Database se connect nahi ho pa rahe hain, please settings check karein", "code": "DB_CONN_ERROR" }` hona chahiye.
+### Epic 4: Final Polish & Export
 
-#### Story 1.3: Secure Dashboard Login (JWT)
+**Goal:** Delivery of a professional, tailored resume that is ready for submission.
+**FRs covered:** FR9, FR10.
+**Implementation Notes:**
 
-As a user, I want to log in to my local Sync dashboard, so that my personal career data remains private and secure from unauthorized LAN access.
+- Resumes Screen: View _only_ tailored resumes linked to jobs.
+- Action: Download PDF (future), Copy Overleaf Link.
 
-**Acceptance Criteria:**
+## Epic 1: Job Management & Dashboard
 
-- **Given** app local machine par run ho rahi hai
-- **When** main login page par valid credentials enter karta hun
-- **Then** mujhe ek JWT token milna chahiye aur dashboard ka access milna chahiye.
-- **And** login fail hone par error message format `{ "error": "Login fail ho gaya, please check credentials", "code": "AUTH_FAILED" }` hona chahiye.
+**Goal:** Enable users to manage their job applications and track their progress.
 
-### Epic 2: Job Intelligence & Management
+### Story 1.1: Create Job Entry (Draft)
 
-User apni dream jobs ki details save kar sakega aur unhe manage kar sakega. Isse AI ko target mil jayega ki resume kis direction mein "Sync" karna hai.
-**FRs covered:** FR1, FR2
-
-#### Story 2.1: Add New Job Listing (Manual)
-
-As a user, I want to manually input Job Title, Company Name, and JD text, so that I can start the tailoring process for a specific role.
-
-**Acceptance Criteria:**
-
-- **Given** main "Add Job" page par hun
-- **When** main Title, Company, aur JD text submit karta hun
-- **Then** data Postgres database mein save hona chahiye.
-- **And** page par success message Romanised Hindi mein dikhna chahiye.
-
-#### Story 2.2: Jobs Management Dashboard
-
-As a user, I want to see a list of all my saved jobs with their status, so that I can track my tailoring progress.
+As a User,
+I want to create a new job entry with Title, Company, Link, and JD,
+So that I can start the tailoring process for a specific application.
 
 **Acceptance Criteria:**
 
-- **Given** mere paas multiple saved jobs hain
-- **When** main "Jobs Dashboard" open karta hun
-- **Then** mujhe jobs ki list (Title/Company) dikhni chahiye.
-- **And** har entry ke neeche ek Romanised Hindi description hona chahiye context ke liye.
+**Given** I am on the Jobs Dashboard
+**When** I click "Add Job" and enter Title, Company, Link, and JD
+**Then** the job is saved with status "Draft"
+**And** I am redirected to the Dashboard where the new job appears
 
-#### Story 2.3: Delete or Archive Job
+### Story 1.2: Job Dashboard & List View
 
-As a user, I want to delete jobs that are no longer relevant, so that my dashboard stays clean.
-
-**Acceptance Criteria:**
-
-- **Given** dashboard par job list visible hai
-- **When** main kisi job par "Delete" click karta hun
-- **Then** wo record database se remove hona chahiye.
-- **And** error hone par format `{ "error": "Job delete nahi ho payi", "code": "DELETE_ERROR" }` hona chahiye.
-
-### Epic 3: Career Profile & Skill Extraction
-
-Base resume upload karke user apna career history auto-parse kar sakega. AI system user ke experience ko projects aur skills mein organize kar lega.
-**FRs covered:** FR3, FR4
-
-#### Story 3.1: Resume PDF Upload & Text Parsing
-
-As a user, I want to upload my base resume in PDF format, so that the system can read my raw career history.
+As a User,
+I want to view all my tracked jobs in a dashboard,
+So that I can see which applications are in progress or completed.
 
 **Acceptance Criteria:**
 
-- **Given** main "Profile" page par hun
-- **When** main ek PDF file upload karta hun
-- **Then** backend ko `PyMuPDF` ya similar library se text extract karna chahiye.
-- **And** success hone par logs mein Romanised Hindi comment dikhna chahiye.
+**Given** I have saved jobs
+**When** I visit the Dashboard
+**Then** I see a list of jobs with Title, Company, Link, and Status
+**And** Status badges show correct colors (Draft=Gray, Tailored=Blue, Applied=Green)
+**And** Clicking the Job Title redirects to the Analysis Page
 
-#### Story 3.2: AI-Driven Project & Skill Extraction
+### Story 1.3: Job Actions (View & Delete)
 
-As a system, I want to use AI to categorize the parsed resume text into "Projects", "Experience", and "Skills", so that the data is organized for tailoring.
-
-**Acceptance Criteria:**
-
-- **Given** resume text successfully extract ho gaya hai
-- **When** AI extraction process trigger hota hai
-- **Then** output ek structured JSON hona chahiye (Projects list ke saath).
-- **And** error hone par format `{ "error": "Resume parse nahi ho pa raha", "code": "PARSE_ERROR" }` hona chahiye.
-
-#### Story 3.3: Personal Profile Editor (Manual Tweak)
-
-As a user, I want to manually edit or add to the AI-extracted projects and skills, so that my base profile is 100% accurate.
+As a User,
+I want to view details or delete a job,
+So that I can manage my application list.
 
 **Acceptance Criteria:**
 
-- **Given** AI ne data extract kar liya hai
-- **When** main kisi field ko edit karke "Save" karta hun
-- **Then** updated data Postgres database mein save hona chahiye.
-- **And** UI par "Profile Updated Successfully" ka message Romanised Hindi mein aana chahiye.
+**Given** I am on the Jobs Dashboard
+**When** I click the "Three-dot" menu on a job row
+**Then** I see options for "View Job Details" and "Delete Job"
+**When** I select "Delete Job" and confirm
+**Then** the job is permanently removed from the database
 
-### Epic 4: "Precision-Fit" Personalisation Engine
+## Epic 2: Resume Profile & Analysis
 
-Ye "Sync" ka core hai. AI user se sawal poochega, highlights draft karega, aur "Pixel Proxy" algorithm se ensure karega ki bullets Page par perfect dikhein.
-**FRs covered:** FR5, FR6, FR7, FR8
+**Goal:** Establish a single truth source for the user's career history and analyze it against job descriptions.
 
-#### Story 4.1: AI Probing Questions (The Gap Finder)
+### Story 2.1: Base Resume Upload (Profile Settings)
 
-As a user, I want the AI to analyze the JD and my profile to ask specific "Probing Questions", so that I can provide the missing context needed for a perfect match.
-
-**Acceptance Criteria:**
-
-- **Given** JD aur Profile data loaded hai
-- **When** tailoring session start hota hai
-- **Then** AI ko 2-3 specific questions generate karne chahiye (e.g., "Kya aapne is project mein AWS use kiya tha?").
-- **And** interaction real-time stream hona chahiye UI par.
-
-#### Story 4.2: Draft Tailored Bullet Points
-
-As a user, I want the AI to generate new bullet points based on my answers, so that my resume highlights exactly what the recruiter is looking for.
+As a User,
+I want to upload a single "Master Resume" in my profile settings,
+So that the system has a baseline of my skills and experience for tailoring.
 
 **Acceptance Criteria:**
 
-- **Given** user ne probing questions ka answer de diya hai
-- **When** AI re-write process trigger hota hai
-- **Then** AI ko LaTeX compatible bullet points generate karne chahiye.
-- **And** bullets draft mode mein save hone chahiye Postgres mein.
+**Given** I am on the Profile Settings page
+**When** I upload a PDF file in the "Base Resume" section
+**Then** the file is parsed and saved locally as my Master Resume
+**And** any existing resume is replaced (One-time setup)
 
-#### Story 4.3: Pixel Proxy Width Validation (The Virtual Ruler)
+### Story 2.2: Job Analysis & Probing Generation
 
-As a system, I want to measure the pixel-width of each generated bullet using Python Pillow, so that I can ensure they are exactly 1.0 to 2.0 lines long.
-
-**Acceptance Criteria:**
-
-- **Given** AI ne naya bullet draft kiya hai
-- **When** Validation layer trigger hota hai
-- **Then** system ko pixel-width calculate karke feedback dena chahiye (PASS/FAIL).
-- **And** FAIL hone par error Romanised Hindi mein hona chahiye: "Bullet bahut lamba hai, please chhota karein".
-
-#### Story 4.4: One-Page Gravity Re-ordering
-
-As a system, I want to re-order resume sections and projects based on match-score and vertical height, so that the most relevant content fits on one page.
+As a User,
+I want the system to analyze my Base Resume against a specific Job Description,
+So that it can identify gaps and ask me relevant questions.
 
 **Acceptance Criteria:**
 
-- **Given** saare tailored bullets ready hain
-- **When** "Optimize Layout" button click hota hai
-- **Then** system ko vertical height calculate karke items re-order karne chahiye.
-- **And** results UI par visible hone chahiye Romanised Hindi comments ke saath.
+**Given** I click a Job Title from the Dashboard
+**When** the Analysis Page loads
+**Then** the system triggers an AI analysis of the Job's JD vs My Base Resume
+**And** "Mandatory Probing Questions" are generated and displayed
+**And** a loading state is shown during analysis (< 30s)
 
-### Epic 5: Final Export & Data Persistence
+## Epic 3: Surgical Tailoring Loop
 
-Tailored content ko Overleaf par bhejna aur saara data locally Postgres/SQLite mein save karna taaki n8n workflow ke through update ho sake.
-**FRs covered:** FR9, FR10
+**Goal:** Empower users to tailor their resume bullets precisely to the job description using AI.
 
-#### Story 5.1: Save Final Tailoring Session
+### Story 3.1: Probing Questionnaire Interface
 
-As a user, I want the system to save my final tailored bullets and job details to the database, so that I can revisit them anytime.
-
-**Acceptance Criteria:**
-
-- **Given** tailoring loop complete hai
-- **When** main "Finalize Resume" click karta hun
-- **Then** final version database mein "COMPLETED" status ke saath save hona chahiye.
-- **And** success message Romanised Hindi mein aana chahiye.
-
-#### Story 5.2: Overleaf Bridge (Direct LaTeX Export)
-
-As a user, I want to export my tailored resume directly to Overleaf, so that I can do the final rendering and printing.
+As a User,
+I want to answer the AI-generated probing questions,
+So that I can provide the missing context needed for tailoring.
 
 **Acceptance Criteria:**
 
-- **Given** tailored content ready hai
-- **When** main "Export to Overleaf" click karta hun
-- **Then** system ko Overleaf ke public POST endpoint par LaTeX code aur data send karna chahiye.
-- **And** error hone par format `{ "error": "Overleaf se connect nahi ho pa rahe hain", "code": "EXPORT_ERROR" }` hona chahiye.
+**Given** the Analysis Page has loaded
+**When** I see the "Mandatory Probing Questions"
+**Then** I can enter multi-line text answers for each question
+**And** the "Generate Tailored Resume" button becomes active only after all questions are answered
 
-#### Story 5.3: Automated Weekly Backups
+### Story 3.2: AI Bullet Generation & Gravity Logic
 
-As a system, I want to take a weekly snapshot of the Postgres database and save it to a backup folder, so that my data is safe from corruption.
-
-**Acceptance Criteria:**
-
-- **Given** system active hai
-- **When** weekly cron job trigger hota hai
-- **Then** `.sql` backup file specific `backups/` folder mein save honi chahiye.
-- **And** backup log file ke **NEECHE** ek Romanised Hindi comment hona chahiye.
-
-#### Story 5.4: n8n Workflow Sync (Post-Finalization)
-
-As a system, I want to trigger a self-hosted n8n workflow after every resume finalization, so that my Q&A and tailoring history is synced across my personal data vault.
+As a User,
+I want the AI to rewrite my resume bullets based on my answers and the JD,
+So that they are highly relevant and prioritized.
 
 **Acceptance Criteria:**
 
-- **Given** resume finalize ho gaya hai
-- **When** completion webhook call hota hai
-- **Then** n8n workflow ko job aur Q&A data receive karke save karna chahiye.
-- **And** error notification Romanised Hindi mein hona chahiye.
+**Given** I have answered all questions
+**When** I click "Generate Tailored Resume"
+**Then** the AI rewrites my resume bullet points
+**And** it applies "Gravity Logic" to re-order bullets by impact
+**And** the job status changes to "Tailored"
+
+### Story 3.3: Precision-Fit Layout Validation
+
+As a User,
+I want to see if my bullet points fit perfectly within 1.0 - 2.0 lines,
+So that my resume looks professional and adheres to the "Rectangular Block" design.
+
+**Acceptance Criteria:**
+
+**Given** the tailored bullets are displayed
+**Then** the system calculates the exact pixel width (using Pixel Proxy)
+**And** visual indicators show Green/Blue for perfect fit (1.0 or 2.0 lines)
+**And** indicators show Orange/Red for overflow or underflow
+**And** I can manually edit the text to fix the layout
+
+## Epic 4: Final Polish & Export
+
+**Goal:** Delivery of a professional, tailored resume that is ready for submission.
+
+### Story 4.1: Tailored Resumes List
+
+As a User,
+I want to see a list of my tailored resumes linked to specific jobs,
+So that I can access the correct version for each application.
+
+**Acceptance Criteria:**
+
+**Given** I am on the Resumes Dashboard
+**Then** I see a list of tailored resumes linked to specific jobs
+**And** each row shows Job Title, Company, and Date Created
+**And** there is NO "Upload Resume" button (this is restricted to Profile Settings)
+
+### Story 4.2: Export Options (Overleaf & PDF)
+
+As a User,
+I want to export my tailored resume,
+So that I change submit it.
+
+**Acceptance Criteria:**
+
+**Given** I am on the Resumes list or Job Analysis page
+**When** I select "Export"
+**Then** I see options for "Copy Overleaf Link" and "Download PDF" (Placeholder for Phase 2)
+**When** I click "Copy Overleaf Link"
+**Then** the LaTeX code is prepared for Overleaf import

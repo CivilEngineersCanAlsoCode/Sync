@@ -16,8 +16,13 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutSettingsRouteImport } from './routes/_layout/settings'
+import { Route as LayoutResumesRouteImport } from './routes/_layout/resumes'
 import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
+import { Route as LayoutProfileIndexRouteImport } from './routes/_layout/profile/index'
+import { Route as LayoutJobsIndexRouteImport } from './routes/_layout/jobs/index'
+import { Route as LayoutJobsAddRouteImport } from './routes/_layout/jobs.add'
+import { Route as LayoutResumesResumeIdProfileRouteImport } from './routes/_layout/resumes.$resumeId.profile'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -53,6 +58,11 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutResumesRoute = LayoutResumesRouteImport.update({
+  id: '/resumes',
+  path: '/resumes',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutItemsRoute = LayoutItemsRouteImport.update({
   id: '/items',
   path: '/items',
@@ -63,16 +73,42 @@ const LayoutAdminRoute = LayoutAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutProfileIndexRoute = LayoutProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutJobsIndexRoute = LayoutJobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutJobsAddRoute = LayoutJobsAddRouteImport.update({
+  id: '/jobs/add',
+  path: '/jobs/add',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutResumesResumeIdProfileRoute =
+  LayoutResumesResumeIdProfileRouteImport.update({
+    id: '/$resumeId/profile',
+    path: '/$resumeId/profile',
+    getParentRoute: () => LayoutResumesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof LayoutIndexRoute
   '/login': typeof LoginRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/admin': typeof LayoutAdminRoute
   '/items': typeof LayoutItemsRoute
+  '/resumes': typeof LayoutResumesRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
-  '/': typeof LayoutIndexRoute
+  '/jobs/add': typeof LayoutJobsAddRoute
+  '/jobs/': typeof LayoutJobsIndexRoute
+  '/profile/': typeof LayoutProfileIndexRoute
+  '/resumes/$resumeId/profile': typeof LayoutResumesResumeIdProfileRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -81,8 +117,13 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/admin': typeof LayoutAdminRoute
   '/items': typeof LayoutItemsRoute
+  '/resumes': typeof LayoutResumesRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/jobs/add': typeof LayoutJobsAddRoute
+  '/jobs': typeof LayoutJobsIndexRoute
+  '/profile': typeof LayoutProfileIndexRoute
+  '/resumes/$resumeId/profile': typeof LayoutResumesResumeIdProfileRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -93,20 +134,30 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_layout/admin': typeof LayoutAdminRoute
   '/_layout/items': typeof LayoutItemsRoute
+  '/_layout/resumes': typeof LayoutResumesRouteWithChildren
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/jobs/add': typeof LayoutJobsAddRoute
+  '/_layout/jobs/': typeof LayoutJobsIndexRoute
+  '/_layout/profile/': typeof LayoutProfileIndexRoute
+  '/_layout/resumes/$resumeId/profile': typeof LayoutResumesResumeIdProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
     | '/admin'
     | '/items'
+    | '/resumes'
     | '/settings'
-    | '/'
+    | '/jobs/add'
+    | '/jobs/'
+    | '/profile/'
+    | '/resumes/$resumeId/profile'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -115,8 +166,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin'
     | '/items'
+    | '/resumes'
     | '/settings'
     | '/'
+    | '/jobs/add'
+    | '/jobs'
+    | '/profile'
+    | '/resumes/$resumeId/profile'
   id:
     | '__root__'
     | '/_layout'
@@ -126,8 +182,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_layout/admin'
     | '/_layout/items'
+    | '/_layout/resumes'
     | '/_layout/settings'
     | '/_layout/'
+    | '/_layout/jobs/add'
+    | '/_layout/jobs/'
+    | '/_layout/profile/'
+    | '/_layout/resumes/$resumeId/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,7 +232,7 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -189,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSettingsRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/resumes': {
+      id: '/_layout/resumes'
+      path: '/resumes'
+      fullPath: '/resumes'
+      preLoaderRoute: typeof LayoutResumesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/items': {
       id: '/_layout/items'
       path: '/items'
@@ -203,21 +271,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutAdminRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/profile/': {
+      id: '/_layout/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof LayoutProfileIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/jobs/': {
+      id: '/_layout/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof LayoutJobsIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/jobs/add': {
+      id: '/_layout/jobs/add'
+      path: '/jobs/add'
+      fullPath: '/jobs/add'
+      preLoaderRoute: typeof LayoutJobsAddRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/resumes/$resumeId/profile': {
+      id: '/_layout/resumes/$resumeId/profile'
+      path: '/$resumeId/profile'
+      fullPath: '/resumes/$resumeId/profile'
+      preLoaderRoute: typeof LayoutResumesResumeIdProfileRouteImport
+      parentRoute: typeof LayoutResumesRoute
+    }
   }
 }
+
+interface LayoutResumesRouteChildren {
+  LayoutResumesResumeIdProfileRoute: typeof LayoutResumesResumeIdProfileRoute
+}
+
+const LayoutResumesRouteChildren: LayoutResumesRouteChildren = {
+  LayoutResumesResumeIdProfileRoute: LayoutResumesResumeIdProfileRoute,
+}
+
+const LayoutResumesRouteWithChildren = LayoutResumesRoute._addFileChildren(
+  LayoutResumesRouteChildren,
+)
 
 interface LayoutRouteChildren {
   LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
+  LayoutResumesRoute: typeof LayoutResumesRouteWithChildren
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutJobsAddRoute: typeof LayoutJobsAddRoute
+  LayoutJobsIndexRoute: typeof LayoutJobsIndexRoute
+  LayoutProfileIndexRoute: typeof LayoutProfileIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAdminRoute: LayoutAdminRoute,
   LayoutItemsRoute: LayoutItemsRoute,
+  LayoutResumesRoute: LayoutResumesRouteWithChildren,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutJobsAddRoute: LayoutJobsAddRoute,
+  LayoutJobsIndexRoute: LayoutJobsIndexRoute,
+  LayoutProfileIndexRoute: LayoutProfileIndexRoute,
 }
 
 const LayoutRouteWithChildren =

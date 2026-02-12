@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobsReadJobsData, JobsReadJobsResponse, JobsCreateJobData, JobsCreateJobResponse, JobsReadJobData, JobsReadJobResponse, JobsUpdateJobData, JobsUpdateJobResponse, JobsDeleteJobData, JobsDeleteJobResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -106,6 +106,117 @@ export class ItemsService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/v1/items/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class JobsService {
+    /**
+     * Read Jobs
+     * Retrieve jobs.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns JobsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readJobs(data: JobsReadJobsData = {}): CancelablePromise<JobsReadJobsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/jobs/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Job
+     * Create new job.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns JobPublic Successful Response
+     * @throws ApiError
+     */
+    public static createJob(data: JobsCreateJobData): CancelablePromise<JobsCreateJobResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/jobs/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Job
+     * Get job by ID.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns JobPublic Successful Response
+     * @throws ApiError
+     */
+    public static readJob(data: JobsReadJobData): CancelablePromise<JobsReadJobResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/jobs/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Job
+     * Update a job.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns JobPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateJob(data: JobsUpdateJobData): CancelablePromise<JobsUpdateJobResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/jobs/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Job
+     * Delete a job.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteJob(data: JobsDeleteJobData): CancelablePromise<JobsDeleteJobResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/jobs/{id}',
             path: {
                 id: data.id
             },
@@ -435,7 +546,6 @@ export class UsersService {
 export class UtilsService {
     /**
      * Test Email
-     * Test emails.
      * @param data The data for the request.
      * @param data.emailTo
      * @returns Message Successful Response
@@ -456,7 +566,7 @@ export class UtilsService {
     
     /**
      * Health Check
-     * @returns boolean Successful Response
+     * @returns string Successful Response
      * @throws ApiError
      */
     public static healthCheck(): CancelablePromise<UtilsHealthCheckResponse> {

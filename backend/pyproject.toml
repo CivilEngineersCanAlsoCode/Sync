@@ -19,6 +19,8 @@ dependencies = [
     "sentry-sdk[fastapi]<2.0.0,>=1.40.6",
     "pyjwt<3.0.0,>=2.8.0",
     "pwdlib[argon2,bcrypt]>=0.3.0",
+    "pdfplumber>=0.11.0",
+    "google-generativeai>=0.8.0",
 ]
 
 [dependency-groups]

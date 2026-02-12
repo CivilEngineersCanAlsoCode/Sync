@@ -196,6 +196,208 @@ export const ItemsPublicSchema = {
     title: 'ItemsPublic'
 } as const;
 
+export const JobCreateSchema = {
+    properties: {
+        title: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Title'
+        },
+        company: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Company'
+        },
+        jd_text: {
+            type: 'string',
+            title: 'Jd Text'
+        },
+        url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Url'
+        },
+        status: {
+            type: 'string',
+            title: 'Status',
+            default: 'SAVED'
+        }
+    },
+    type: 'object',
+    required: ['title', 'company', 'jd_text'],
+    title: 'JobCreate'
+} as const;
+
+export const JobPublicSchema = {
+    properties: {
+        title: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Title'
+        },
+        company: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Company'
+        },
+        jd_text: {
+            type: 'string',
+            title: 'Jd Text'
+        },
+        url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Url'
+        },
+        status: {
+            type: 'string',
+            title: 'Status',
+            default: 'SAVED'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        owner_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Owner Id'
+        },
+        created_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Created At'
+        },
+        updated_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['title', 'company', 'jd_text', 'id', 'owner_id', 'created_at', 'updated_at'],
+    title: 'JobPublic'
+} as const;
+
+export const JobUpdateSchema = {
+    properties: {
+        title: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Title'
+        },
+        company: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Company'
+        },
+        jd_text: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Jd Text'
+        },
+        url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 2048
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Url'
+        },
+        status: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Status'
+        }
+    },
+    type: 'object',
+    title: 'JobUpdate'
+} as const;
+
+export const JobsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/JobPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'JobsPublic'
+} as const;
+
 export const MessageSchema = {
     properties: {
         message: {
