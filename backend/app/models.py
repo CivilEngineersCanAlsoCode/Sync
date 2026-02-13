@@ -135,11 +135,12 @@ class JobUpdate(JobBase):
     company: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
     url: str | None = Field(default=None, max_length=512)
     jd_text: str | None = None  # type: ignore
+    status: str | None = Field(default=None, max_length=50)
 
 
 class Job(JobBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    status: str = Field(default="Applied", max_length=50)
+    status: str = Field(default="Draft", max_length=50)
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
@@ -154,6 +155,7 @@ class Job(JobBase, table=True):
 class JobPublic(JobBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+    status: str
     created_at: datetime | None
 
 

@@ -16,7 +16,7 @@ const PendingItems = () => (
         <TableHead>Title</TableHead>
         <TableHead>Description</TableHead>
         <TableHead>
-          <span className="sr-only">Actions</span>
+          Actions
         </TableHead>
       </TableRow>
     </TableHeader>

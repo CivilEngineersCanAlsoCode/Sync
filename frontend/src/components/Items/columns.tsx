@@ -63,7 +63,7 @@ export const columns: ColumnDef<ItemPublic>[] = [
   },
   {
     id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
+    header: "Actions",
     cell: ({ row }) => (
       <div className="flex justify-end">
         <ItemActionsMenu item={row.original} />

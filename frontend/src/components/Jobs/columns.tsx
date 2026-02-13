@@ -56,8 +56,23 @@ export const columns: ColumnDef<JobPublic>[] = [
     },
   },
   {
-    accessorKey: "location",
-    header: "Location",
+    accessorKey: "url",
+    header: "Job Link",
+    cell: ({ row }) => {
+      const url = row.getValue("url") as string
+      return url ? (
+        <a 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline max-w-[200px] truncate block"
+        >
+          {url}
+        </a>
+      ) : (
+        <span className="text-muted-foreground">-</span>
+      )
+    },
   },
     {
     accessorKey: "created_at",
@@ -68,6 +83,7 @@ export const columns: ColumnDef<JobPublic>[] = [
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row, table }) => {
       const job = row.original
       const meta = table.options.meta as { onDelete: (id: string) => void } | undefined
@@ -81,15 +97,9 @@ export const columns: ColumnDef<JobPublic>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(job.id.toString())}
-            >
-              Copy Job ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+
             <DropdownMenuItem asChild>
-                <Link to={`/jobs/${job.id}/edit` as any}>Edit Job</Link> 
+                <Link to={`/jobs/${job.id}` as any}>View job details</Link> 
             </DropdownMenuItem>
              <DropdownMenuItem 
                 className="text-destructive focus:text-destructive"

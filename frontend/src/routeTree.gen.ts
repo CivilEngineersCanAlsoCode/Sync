@@ -23,6 +23,7 @@ import { Route as LayoutProfileIndexRouteImport } from './routes/_layout/profile
 import { Route as LayoutJobsIndexRouteImport } from './routes/_layout/jobs/index'
 import { Route as LayoutJobsAddRouteImport } from './routes/_layout/jobs.add'
 import { Route as LayoutResumesResumeIdProfileRouteImport } from './routes/_layout/resumes.$resumeId.profile'
+import { Route as LayoutJobsJobIdAnalysisRouteImport } from './routes/_layout/jobs.$jobId.analysis'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -94,6 +95,11 @@ const LayoutResumesResumeIdProfileRoute =
     path: '/$resumeId/profile',
     getParentRoute: () => LayoutResumesRoute,
   } as any)
+const LayoutJobsJobIdAnalysisRoute = LayoutJobsJobIdAnalysisRouteImport.update({
+  id: '/jobs/$jobId/analysis',
+  path: '/jobs/$jobId/analysis',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/jobs/add': typeof LayoutJobsAddRoute
   '/jobs/': typeof LayoutJobsIndexRoute
   '/profile/': typeof LayoutProfileIndexRoute
+  '/jobs/$jobId/analysis': typeof LayoutJobsJobIdAnalysisRoute
   '/resumes/$resumeId/profile': typeof LayoutResumesResumeIdProfileRoute
 }
 export interface FileRoutesByTo {
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/jobs/add': typeof LayoutJobsAddRoute
   '/jobs': typeof LayoutJobsIndexRoute
   '/profile': typeof LayoutProfileIndexRoute
+  '/jobs/$jobId/analysis': typeof LayoutJobsJobIdAnalysisRoute
   '/resumes/$resumeId/profile': typeof LayoutResumesResumeIdProfileRoute
 }
 export interface FileRoutesById {
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/_layout/jobs/add': typeof LayoutJobsAddRoute
   '/_layout/jobs/': typeof LayoutJobsIndexRoute
   '/_layout/profile/': typeof LayoutProfileIndexRoute
+  '/_layout/jobs/$jobId/analysis': typeof LayoutJobsJobIdAnalysisRoute
   '/_layout/resumes/$resumeId/profile': typeof LayoutResumesResumeIdProfileRoute
 }
 export interface FileRouteTypes {
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/jobs/add'
     | '/jobs/'
     | '/profile/'
+    | '/jobs/$jobId/analysis'
     | '/resumes/$resumeId/profile'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/jobs/add'
     | '/jobs'
     | '/profile'
+    | '/jobs/$jobId/analysis'
     | '/resumes/$resumeId/profile'
   id:
     | '__root__'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/_layout/jobs/add'
     | '/_layout/jobs/'
     | '/_layout/profile/'
+    | '/_layout/jobs/$jobId/analysis'
     | '/_layout/resumes/$resumeId/profile'
   fileRoutesById: FileRoutesById
 }
@@ -299,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutResumesResumeIdProfileRouteImport
       parentRoute: typeof LayoutResumesRoute
     }
+    '/_layout/jobs/$jobId/analysis': {
+      id: '/_layout/jobs/$jobId/analysis'
+      path: '/jobs/$jobId/analysis'
+      fullPath: '/jobs/$jobId/analysis'
+      preLoaderRoute: typeof LayoutJobsJobIdAnalysisRouteImport
+      parentRoute: typeof LayoutRoute
+    }
   }
 }
 
@@ -323,6 +342,7 @@ interface LayoutRouteChildren {
   LayoutJobsAddRoute: typeof LayoutJobsAddRoute
   LayoutJobsIndexRoute: typeof LayoutJobsIndexRoute
   LayoutProfileIndexRoute: typeof LayoutProfileIndexRoute
+  LayoutJobsJobIdAnalysisRoute: typeof LayoutJobsJobIdAnalysisRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
@@ -334,6 +354,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutJobsAddRoute: LayoutJobsAddRoute,
   LayoutJobsIndexRoute: LayoutJobsIndexRoute,
   LayoutProfileIndexRoute: LayoutProfileIndexRoute,
+  LayoutJobsJobIdAnalysisRoute: LayoutJobsJobIdAnalysisRoute,
 }
 
 const LayoutRouteWithChildren =
