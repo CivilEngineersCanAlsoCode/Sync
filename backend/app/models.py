@@ -53,6 +53,7 @@ class User(UserBase, table=True):
     jobs: list["Job"] = Relationship(back_populates="owner", cascade_delete=True)
     resumes: list["Resume"] = Relationship(back_populates="owner", cascade_delete=True)
     career_profiles: list["CareerProfile"] = Relationship(back_populates="owner", cascade_delete=True)
+    token_version: int = Field(default=0)
 
 
 class UserPublic(UserBase):
@@ -157,6 +158,16 @@ class JobPublic(JobBase):
     owner_id: uuid.UUID
     status: str
     created_at: datetime | None
+
+
+class JobStats(SQLModel):
+    Draft: int = 0
+    Applied: int = 0
+    Shortlisted: int = 0
+    Interviewing: int = 0
+    Offered: int = 0
+    Redirected: int = 0
+    Waiting: int = 0
 
 
 class JobsPublic(SQLModel):

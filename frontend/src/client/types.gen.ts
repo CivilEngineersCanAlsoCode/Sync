@@ -69,6 +69,16 @@ export type JobUpdate = {
     status?: (string | null);
 };
 
+export type JobStats = {
+    Draft: number;
+    Applied: number;
+    Shortlisted: number;
+    Interviewing: number;
+    Offered: number;
+    Rejected: number;
+    Waiting: number;
+};
+
 export type Message = {
     message: string;
 };

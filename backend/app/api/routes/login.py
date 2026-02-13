@@ -40,10 +40,16 @@ def login_access_token(
             status_code=400,
             detail={"error": "Aapka account inactive hai", "code": "AUTH_INACTIVE"},
         )
+    # Concurrent Login Prevention: Increment token version
+    user.token_version += 1
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(
         access_token=security.create_access_token(
-            user.id, expires_delta=access_token_expires
+            user.id, expires_delta=access_token_expires, extra_claims={"token_version": user.token_version}
         )
     )
 # Ye endpoint user ke credentials verify karke JWT access token generate karta hai.

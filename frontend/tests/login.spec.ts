@@ -46,7 +46,7 @@ test("Log in with valid email and password ", async ({ page }) => {
   await page.waitForURL("/")
 
   await expect(
-    page.getByText("Welcome back, nice to see you again!"),
+    page.getByText("Welcome back! Here are your tracked jobs."),
   ).toBeVisible()
 })
 
@@ -78,7 +78,7 @@ test("Successful log out", async ({ page }) => {
   await page.waitForURL("/")
 
   await expect(
-    page.getByText("Welcome back, nice to see you again!"),
+    page.getByText("Welcome back! Here are your tracked jobs."),
   ).toBeVisible()
 
   await page.getByTestId("user-menu").click()
@@ -95,7 +95,7 @@ test("Logged-out user cannot access protected routes", async ({ page }) => {
   await page.waitForURL("/")
 
   await expect(
-    page.getByText("Welcome back, nice to see you again!"),
+    page.getByText("Welcome back! Here are your tracked jobs."),
   ).toBeVisible()
 
   await page.getByTestId("user-menu").click()
@@ -114,4 +114,40 @@ test("Redirects to /login when token is wrong", async ({ page }) => {
   await page.goto("/settings")
   await page.waitForURL("/login")
   await expect(page).toHaveURL("/login")
+})
+
+test("Already logged in user is redirected to dashboard", async ({ page }) => {
+  await page.goto("/login")
+  await fillForm(page, firstSuperuser, firstSuperuserPassword)
+  await page.getByRole("button", { name: "Log In" }).click()
+  await page.waitForURL("/")
+
+  await page.goto("/login")
+  await page.waitForURL("/")
+  await expect(page).toHaveURL("/")
+})
+
+test("Concurrent login invalidates previous session", async ({ page, browser }) => {
+  // Login first time
+  await page.goto("/login")
+  await fillForm(page, firstSuperuser, firstSuperuserPassword)
+  await page.getByRole("button", { name: "Log In" }).click()
+  await page.waitForURL("/")
+  
+  // Create a new context (simulate another browser/device)
+  const context2 = await browser.newContext()
+  const page2 = await context2.newPage()
+  await page2.goto((process.env.FRONTEND_HOST || "http://localhost:5173") + "/login")
+  await fillForm(page2, firstSuperuser, firstSuperuserPassword)
+  await page2.getByRole("button", { name: "Log In" }).click()
+  await page2.waitForURL("/")
+  
+  // Original session should now be invalid
+  // Attempt to access a protected route
+  await page.goto("/settings")
+  // Should accept 403 or redirect to login. The app redirects to /login on 403/invalid token
+  await page.waitForURL("/login")
+  await expect(page).toHaveURL("/login")
+  
+  await context2.close()
 })

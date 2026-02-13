@@ -50,7 +50,7 @@ export const Route = createFileRoute("/login")({
   }),
 })
 
-function Login() {
+export function Login() {
   const { loginMutation } = useAuth()
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -61,6 +61,11 @@ function Login() {
       password: "",
     },
   })
+
+  // HTTPS Enforcement
+  if (import.meta.env.PROD && window.location.protocol !== "https:") {
+     window.location.href = window.location.href.replace(/^http:/, "https:");
+  }
 
   const onSubmit = (data: FormData) => {
     if (loginMutation.isPending) return
@@ -73,12 +78,17 @@ function Login() {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-6"
+          aria-busy={loginMutation.isPending}
         >
           <div className="flex flex-col items-center gap-2 text-center">
             <h1 className="text-2xl font-bold">Login to your account</h1>
           </div>
 
-          <div className="grid gap-4">
+          <div 
+            className="grid gap-4"
+            role="status" 
+            aria-live="polite"
+          >
             <FormField
               control={form.control}
               name="username"

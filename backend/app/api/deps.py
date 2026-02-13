@@ -49,6 +49,15 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
             status_code=400,
             detail={"error": "Aapka account inactive hai", "code": "AUTH_INACTIVE"},
         )
+    
+    # Concurrent Login Check
+    token_version = payload.get("token_version")
+    if token_version is not None and token_version != user.token_version:
+         raise HTTPException(
+            status_code=403,
+            detail={"error": "Aap doosri jagah login ho gaye hain, kripya dobara login karein", "code": "AUTH_CONCURRENT_LOGIN"},
+        )
+
     return user
 # Ye function JWT token verify karke current logged-in user ko database se fetch karta hai.
 

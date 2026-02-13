@@ -4,11 +4,32 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
+
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Job, JobCreate, JobPublic, JobsPublic, JobUpdate, Message
+from app.models import Job, JobCreate, JobPublic, JobsPublic, JobStats, JobUpdate, Message
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
+
+
+@router.get("/stats", response_model=JobStats)
+def read_job_stats(session: SessionDep, current_user: CurrentUser) -> Any:
+    """
+    Get job statistics by status.
+    """
+    statement = (
+        select(Job.status, func.count(Job.id))
+        .where(Job.owner_id == current_user.id)
+        .group_by(Job.status)
+    )
+    results = session.exec(statement).all()
+    
+    stats = {status: count for status, count in results}
+    # AC1: "Redirected" is used instead of "Rejected"
+    if "Rejected" in stats:
+        stats["Redirected"] = stats.pop("Rejected")
+    return JobStats(**stats)
+# Ye endpoint job status counts return karta hai dashboard ke liye.
 
 
 @router.get("/", response_model=JobsPublic)

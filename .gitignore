@@ -25,3 +25,9 @@ dist/
 
 # BMAD memory (user-specific)
 _bmad/_memory/
+
+# Test results
+test-results/
+playwright-report/
+blob-report/
+ancillary-files/

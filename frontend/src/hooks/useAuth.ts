@@ -29,6 +29,7 @@ const useAuth = () => {
 
   if (error) {
     localStorage.removeItem("access_token");
+    showErrorToast("Your session has expired. Please log in again.");
     navigate({ to: "/login" });
   }
 
@@ -48,6 +49,9 @@ const useAuth = () => {
     const response = await LoginService.loginAccessToken({
       formData: data,
     });
+    if (!response.access_token) {
+      throw new Error("Login failed: No access token received from server");
+    }
     localStorage.setItem("access_token", response.access_token);
   };
 

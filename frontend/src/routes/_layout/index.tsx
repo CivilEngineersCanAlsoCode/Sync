@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 
 import { JobsService } from "@/client"
 import { Badge } from "@/components/ui/badge"
+import { JobStatsGrid } from "@/components/Dashboard/JobStats"
 import {
   Table,
   TableBody,
@@ -46,14 +47,24 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div>
-        <h1 className="text-2xl font-bold truncate max-w-sm">
-          Hi, {currentUser?.full_name || currentUser?.email} 👋
-        </h1>
-        <p className="text-muted-foreground">
-          Welcome back! Here are your tracked jobs.
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold truncate max-w-sm">
+            Hi, {currentUser?.full_name || currentUser?.email} 👋
+          </h1>
+          <p className="text-muted-foreground">
+            Welcome back! Here are your tracked jobs.
+          </p>
+        </div>
+        <Link
+          to="/jobs/add"
+          className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
+        >
+          <span>＋</span> Add Job
+        </Link>
       </div>
+
+      <JobStatsGrid />
 
       <div className="rounded-md border">
         <Table>
