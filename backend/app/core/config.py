@@ -55,6 +55,11 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str = ""
     POSTGRES_DB: str = ""
+    
+    # AI Provider Configuration
+    AI_PROVIDER: str = "auto"
+    GEMINI_API_KEY: str | None = None
+    OLLAMA_BASE_URL: str = "http://host.docker.internal:11434"
 
     @computed_field  # type: ignore[prop-decorator]
     @property

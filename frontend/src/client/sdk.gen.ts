@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { JobStats, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobsReadJobsData, JobsReadJobsResponse, JobsCreateJobData, JobsCreateJobResponse, JobsReadJobData, JobsReadJobResponse, JobsUpdateJobData, JobsUpdateJobResponse, JobsDeleteJobData, JobsDeleteJobResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, JobsReadJobStatsResponse, JobsReadJobsData, JobsReadJobsResponse, JobsCreateJobData, JobsCreateJobResponse, JobsReadJobData, JobsReadJobResponse, JobsUpdateJobData, JobsUpdateJobResponse, JobsDeleteJobData, JobsDeleteJobResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, ProfilesReadResumeProfileData, ProfilesReadResumeProfileResponse, ProfilesUpdateResumeProfileData, ProfilesUpdateResumeProfileResponse, ProbingQuestionsUpdateQuestionData, ProbingQuestionsUpdateQuestionResponse, ResumesUploadResumeData, ResumesUploadResumeResponse, ResumesReadResumesData, ResumesReadResumesResponse, ResumesReadResumeData, ResumesReadResumeResponse, ResumesDeleteResumeData, ResumesDeleteResumeResponse, ResumesExtractCareerProfileData, ResumesExtractCareerProfileResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class ItemsService {
     /**
@@ -118,6 +118,19 @@ export class ItemsService {
 
 export class JobsService {
     /**
+     * Read Job Stats
+     * Get job statistics by status.
+     * @returns JobStats Successful Response
+     * @throws ApiError
+     */
+    public static readJobStats(): CancelablePromise<JobsReadJobStatsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/jobs/stats'
+        });
+    }
+    
+    /**
      * Read Jobs
      * Retrieve jobs.
      * @param data The data for the request.
@@ -223,19 +236,6 @@ export class JobsService {
             errors: {
                 422: 'Validation Error'
             }
-        });
-    }
-    
-    /**
-     * Read Job Stats
-     * Get job statistics by status.
-     * @returns JobStats Successful Response
-     * @throws ApiError
-     */
-    public static readJobStats(): CancelablePromise<JobStats> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/jobs/stats'
         });
     }
 }
@@ -352,6 +352,189 @@ export class PrivateService {
             url: '/api/v1/private/users/',
             body: data.requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class ProfilesService {
+    /**
+     * Read Resume Profile
+     * Get career profile for a specific resume.
+     * @param data The data for the request.
+     * @param data.id
+     * @returns CareerProfileRead Successful Response
+     * @throws ApiError
+     */
+    public static readResumeProfile(data: ProfilesReadResumeProfileData): CancelablePromise<ProfilesReadResumeProfileResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/resumes/{id}/profile',
+            path: {
+                id: data.id
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Resume Profile
+     * Update career profile (projects, experience, skills).
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns CareerProfileRead Successful Response
+     * @throws ApiError
+     */
+    public static updateResumeProfile(data: ProfilesUpdateResumeProfileData): CancelablePromise<ProfilesUpdateResumeProfileResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/resumes/{id}/profile',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+
+export class ProbingQuestionsService {
+    /**
+     * Update Probing Question
+     * Update a new probing question.
+     * @param data The data for the request.
+     * @param data.id
+     * @param data.requestBody
+     * @returns ProbingQuestionPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateProbingQuestion(data: ProbingQuestionsUpdateQuestionData): CancelablePromise<ProbingQuestionsUpdateQuestionResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/probing-questions/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class ResumesService {
+    /**
+     * Upload Resume
+     * Upload a PDF resume and extract text.
+     * @param data The data for the request.
+     * @param data.formData
+     * @returns ResumePublic Successful Response
+     * @throws ApiError
+     */
+    public static uploadResume(data: ResumesUploadResumeData): CancelablePromise<ResumesUploadResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/resumes/upload',
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Resumes
+     * Retrieve resumes for current user.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns ResumesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readResumes(data: ResumesReadResumesData = {}): CancelablePromise<ResumesReadResumesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/resumes/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Resume
+     * Get resume by ID.
+     * @param data The data for the request.
+     * @param data.resumeId
+     * @returns ResumePublic Successful Response
+     * @throws ApiError
+     */
+    public static readResume(data: ResumesReadResumeData): CancelablePromise<ResumesReadResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/resumes/{resume_id}',
+            path: {
+                resume_id: data.resumeId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Resume
+     * Delete a resume.
+     * @param data The data for the request.
+     * @param data.resumeId
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteResume(data: ResumesDeleteResumeData): CancelablePromise<ResumesDeleteResumeResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/resumes/{resume_id}',
+            path: {
+                resume_id: data.resumeId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Extract Career Profile
+     * Extract structured career profile from resume using AI.
+     * Supports both Gemini (cloud) and Ollama (local) providers.
+     * @param data The data for the request.
+     * @param data.resumeId
+     * @returns CareerProfilePublic Successful Response
+     * @throws ApiError
+     */
+    public static extractCareerProfile(data: ResumesExtractCareerProfileData): CancelablePromise<ResumesExtractCareerProfileResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/resumes/{resume_id}/extract',
+            path: {
+                resume_id: data.resumeId
+            },
             errors: {
                 422: 'Validation Error'
             }

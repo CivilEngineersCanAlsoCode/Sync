@@ -4,6 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { JobsService } from "@/client"
 import { Badge } from "@/components/ui/badge"
 import { JobStatsGrid } from "@/components/Dashboard/JobStats"
+import { AddJobModal } from "@/components/Dashboard/AddJobModal"
 import {
   Table,
   TableBody,
@@ -38,10 +39,15 @@ function Dashboard() {
     switch (status) {
       case "Applied":
         return "bg-green-500 hover:bg-green-600"
+      case "Shortlisted":
       case "Tailored":
         return "bg-blue-500 hover:bg-blue-600"
+      case "Interviewing":
+        return "bg-yellow-500 hover:bg-yellow-600"
+      case "Offered":
+        return "bg-purple-500 hover:bg-purple-600"
       default:
-        return "bg-gray-500 hover:bg-gray-600" // Draft
+        return "bg-gray-500 hover:bg-gray-600" // Draft / Rejected / Others
     }
   }
 
@@ -56,12 +62,13 @@ function Dashboard() {
             Welcome back! Here are your tracked jobs.
           </p>
         </div>
-        <Link
-          to="/jobs/add"
-          className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
-        >
-          <span>＋</span> Add Job
-        </Link>
+        <AddJobModal>
+          <button
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 cursor-pointer"
+          >
+            <span>＋</span> Add Job
+          </button>
+        </AddJobModal>
       </div>
 
       <JobStatsGrid />
@@ -72,6 +79,7 @@ function Dashboard() {
             <TableRow>
               <TableHead>Job Title</TableHead>
               <TableHead>Company</TableHead>
+              <TableHead>Location</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Link</TableHead>
               <TableHead className="text-right">Added On</TableHead>
@@ -80,19 +88,19 @@ function Dashboard() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24">
+                <TableCell colSpan={6} className="text-center h-24">
                   Loading jobs...
                 </TableCell>
               </TableRow>
             ) : error ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24 text-red-500">
+                <TableCell colSpan={6} className="text-center h-24 text-red-500">
                   Error loading jobs.
                 </TableCell>
               </TableRow>
             ) : jobs?.data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center h-24">
+                <TableCell colSpan={6} className="text-center h-24">
                   No jobs found. Add a new job to get started!
                 </TableCell>
               </TableRow>
@@ -101,7 +109,7 @@ function Dashboard() {
                 <TableRow key={job.id}>
                   <TableCell className="font-medium">
                     <Link
-                      to="/jobs/$jobId/analysis"
+                      to="/jobs/$jobId"
                       params={{ jobId: job.id }}
                       className="hover:underline text-primary"
                     >
@@ -109,6 +117,11 @@ function Dashboard() {
                     </Link>
                   </TableCell>
                   <TableCell>{job.company}</TableCell>
+                  <TableCell>
+                    <span className="text-muted-foreground text-sm">
+                      {job.location || "-"}
+                    </span>
+                  </TableCell>
                   <TableCell>
                     <Badge className={getStatusColor(job.status)}>
                       {job.status}

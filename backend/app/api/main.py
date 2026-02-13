@@ -1,14 +1,15 @@
 from fastapi import APIRouter
 
-from app.api.routes import items, jobs, login, private, profiles, resumes, users, utils
+from app.api.routes import items, jobs, login, private, profiles, probing_questions, resumes, users, utils
 from app.core.config import settings
 
 api_router = APIRouter()
-api_router.include_router(login.router)
+api_router.include_router(login.router, tags=["login"])
 api_router.include_router(users.router)
 api_router.include_router(utils.router)
-api_router.include_router(items.router)
+api_router.include_router(items.router) # This line was not modified in the provided "Code Edit" snippet, keeping it as is.
 api_router.include_router(jobs.router)
+api_router.include_router(probing_questions.router, prefix="/probing-questions", tags=["probing-questions"])
 api_router.include_router(resumes.router)
 api_router.include_router(profiles.router, prefix="/resumes", tags=["profiles"])
 

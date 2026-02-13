@@ -57,6 +57,205 @@ export const Body_login_login_access_tokenSchema = {
     title: 'Body_login-login_access_token'
 } as const;
 
+export const Body_resumes_upload_resumeSchema = {
+    properties: {
+        file: {
+            type: 'string',
+            format: 'binary',
+            title: 'File'
+        }
+    },
+    type: 'object',
+    required: ['file'],
+    title: 'Body_resumes-upload_resume'
+} as const;
+
+export const CareerProfilePublicSchema = {
+    properties: {
+        ai_provider: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Ai Provider',
+            description: "AI provider used: 'gemini' or 'ollama'"
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        resume_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Resume Id'
+        },
+        owner_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Owner Id'
+        },
+        projects: {
+            type: 'string',
+            title: 'Projects'
+        },
+        experience: {
+            type: 'string',
+            title: 'Experience'
+        },
+        skills: {
+            type: 'string',
+            title: 'Skills'
+        },
+        extracted_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Extracted At'
+        }
+    },
+    type: 'object',
+    required: ['ai_provider', 'id', 'resume_id', 'owner_id', 'projects', 'experience', 'skills', 'extracted_at'],
+    title: 'CareerProfilePublic',
+    description: 'Public response model for career profile'
+} as const;
+
+export const CareerProfileReadSchema = {
+    properties: {
+        ai_provider: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Ai Provider',
+            description: "AI provider used: 'gemini' or 'ollama'"
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        resume_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Resume Id'
+        },
+        owner_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Owner Id'
+        },
+        projects: {
+            items: {
+                '$ref': '#/components/schemas/Project'
+            },
+            type: 'array',
+            title: 'Projects'
+        },
+        experience: {
+            items: {
+                '$ref': '#/components/schemas/Experience'
+            },
+            type: 'array',
+            title: 'Experience'
+        },
+        skills: {
+            items: {
+                '$ref': '#/components/schemas/SkillCategory'
+            },
+            type: 'array',
+            title: 'Skills'
+        },
+        extracted_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Extracted At'
+        }
+    },
+    type: 'object',
+    required: ['ai_provider', 'id', 'resume_id', 'owner_id', 'projects', 'experience', 'skills', 'extracted_at'],
+    title: 'CareerProfileRead',
+    description: 'Public response model with structured data (not JSON strings).'
+} as const;
+
+export const CareerProfileUpdateSchema = {
+    properties: {
+        projects: {
+            anyOf: [
+                {
+                    items: {
+                        '$ref': '#/components/schemas/Project'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Projects'
+        },
+        experience: {
+            anyOf: [
+                {
+                    items: {
+                        '$ref': '#/components/schemas/Experience'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Experience'
+        },
+        skills: {
+            anyOf: [
+                {
+                    items: {
+                        '$ref': '#/components/schemas/SkillCategory'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Skills'
+        }
+    },
+    type: 'object',
+    title: 'CareerProfileUpdate',
+    description: `Update model for career profile.
+All fields are optional to allow partial updates.`
+} as const;
+
+export const ExperienceSchema = {
+    properties: {
+        company: {
+            type: 'string',
+            title: 'Company',
+            description: 'Company name'
+        },
+        role: {
+            type: 'string',
+            title: 'Role',
+            description: 'Job title/role'
+        },
+        duration: {
+            type: 'string',
+            title: 'Duration',
+            description: "Time period, e.g., '2020-2023' or '2 years'"
+        },
+        responsibilities: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Responsibilities',
+            description: 'Key responsibilities and achievements'
+        }
+    },
+    type: 'object',
+    required: ['company', 'role', 'duration', 'responsibilities'],
+    title: 'Experience',
+    description: 'Work experience entry from resume'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         detail: {
@@ -126,18 +325,6 @@ export const ItemPublicSchema = {
             type: 'string',
             format: 'uuid',
             title: 'Owner Id'
-        },
-        created_at: {
-            anyOf: [
-                {
-                    type: 'string',
-                    format: 'date-time'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Created At'
         }
     },
     type: 'object',
@@ -200,40 +387,37 @@ export const JobCreateSchema = {
     properties: {
         title: {
             type: 'string',
-            maxLength: 255,
+            maxLength: 100,
             minLength: 1,
             title: 'Title'
         },
         company: {
             type: 'string',
-            maxLength: 255,
+            maxLength: 100,
             minLength: 1,
             title: 'Company'
         },
-        jd_text: {
-            type: 'string',
-            title: 'Jd Text'
-        },
         url: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 2048
-                },
-                {
-                    type: 'null'
-                }
-            ],
+            type: 'string',
+            maxLength: 512,
+            minLength: 1,
             title: 'Url'
         },
-        status: {
+        location: {
             type: 'string',
-            title: 'Status',
-            default: 'SAVED'
+            maxLength: 255,
+            minLength: 1,
+            title: 'Location'
+        },
+        description: {
+            type: 'string',
+            maxLength: 5000,
+            minLength: 1,
+            title: 'Description'
         }
     },
     type: 'object',
-    required: ['title', 'company', 'jd_text'],
+    required: ['title', 'company', 'url', 'location', 'description'],
     title: 'JobCreate'
 } as const;
 
@@ -241,36 +425,33 @@ export const JobPublicSchema = {
     properties: {
         title: {
             type: 'string',
-            maxLength: 255,
+            maxLength: 100,
             minLength: 1,
             title: 'Title'
         },
         company: {
             type: 'string',
-            maxLength: 255,
+            maxLength: 100,
             minLength: 1,
             title: 'Company'
         },
-        jd_text: {
-            type: 'string',
-            title: 'Jd Text'
-        },
         url: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 2048
-                },
-                {
-                    type: 'null'
-                }
-            ],
+            type: 'string',
+            maxLength: 512,
+            minLength: 1,
             title: 'Url'
         },
-        status: {
+        location: {
             type: 'string',
-            title: 'Status',
-            default: 'SAVED'
+            maxLength: 255,
+            minLength: 1,
+            title: 'Location'
+        },
+        description: {
+            type: 'string',
+            maxLength: 5000,
+            minLength: 1,
+            title: 'Description'
         },
         id: {
             type: 'string',
@@ -281,6 +462,10 @@ export const JobPublicSchema = {
             type: 'string',
             format: 'uuid',
             title: 'Owner Id'
+        },
+        status: {
+            type: 'string',
+            title: 'Status'
         },
         created_at: {
             anyOf: [
@@ -293,23 +478,53 @@ export const JobPublicSchema = {
                 }
             ],
             title: 'Created At'
-        },
-        updated_at: {
-            anyOf: [
-                {
-                    type: 'string',
-                    format: 'date-time'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Updated At'
         }
     },
     type: 'object',
-    required: ['title', 'company', 'jd_text', 'id', 'owner_id', 'created_at', 'updated_at'],
+    required: ['title', 'company', 'url', 'location', 'description', 'id', 'owner_id', 'status', 'created_at'],
     title: 'JobPublic'
+} as const;
+
+export const JobStatsSchema = {
+    properties: {
+        Draft: {
+            type: 'integer',
+            title: 'Draft',
+            default: 0
+        },
+        Applied: {
+            type: 'integer',
+            title: 'Applied',
+            default: 0
+        },
+        Shortlisted: {
+            type: 'integer',
+            title: 'Shortlisted',
+            default: 0
+        },
+        Interviewing: {
+            type: 'integer',
+            title: 'Interviewing',
+            default: 0
+        },
+        Offered: {
+            type: 'integer',
+            title: 'Offered',
+            default: 0
+        },
+        Redirected: {
+            type: 'integer',
+            title: 'Redirected',
+            default: 0
+        },
+        Waiting: {
+            type: 'integer',
+            title: 'Waiting',
+            default: 0
+        }
+    },
+    type: 'object',
+    title: 'JobStats'
 } as const;
 
 export const JobUpdateSchema = {
@@ -318,7 +533,7 @@ export const JobUpdateSchema = {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255,
+                    maxLength: 100,
                     minLength: 1
                 },
                 {
@@ -331,7 +546,7 @@ export const JobUpdateSchema = {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255,
+                    maxLength: 100,
                     minLength: 1
                 },
                 {
@@ -340,22 +555,12 @@ export const JobUpdateSchema = {
             ],
             title: 'Company'
         },
-        jd_text: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Jd Text'
-        },
         url: {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 2048
+                    maxLength: 512,
+                    minLength: 1
                 },
                 {
                     type: 'null'
@@ -363,10 +568,37 @@ export const JobUpdateSchema = {
             ],
             title: 'Url'
         },
+        location: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Location'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 5000,
+                    minLength: 1
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
         status: {
             anyOf: [
                 {
-                    type: 'string'
+                    type: 'string',
+                    maxLength: 50
                 },
                 {
                     type: 'null'
@@ -451,6 +683,125 @@ export const PrivateUserCreateSchema = {
     type: 'object',
     required: ['email', 'password', 'full_name'],
     title: 'PrivateUserCreate'
+} as const;
+
+export const ProjectSchema = {
+    properties: {
+        title: {
+            type: 'string',
+            title: 'Title',
+            description: 'Project name or title'
+        },
+        description: {
+            type: 'string',
+            title: 'Description',
+            description: 'Brief description of what was built'
+        },
+        technologies: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Technologies',
+            description: 'Technologies, languages, frameworks used'
+        },
+        impact: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Impact',
+            description: 'Business impact or metrics if mentioned'
+        }
+    },
+    type: 'object',
+    required: ['title', 'description', 'technologies'],
+    title: 'Project',
+    description: 'Individual project extracted from resume'
+} as const;
+
+export const ResumePublicSchema = {
+    properties: {
+        filename: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Filename'
+        },
+        raw_text: {
+            type: 'string',
+            title: 'Raw Text'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        owner_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Owner Id'
+        },
+        upload_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Upload Date'
+        }
+    },
+    type: 'object',
+    required: ['filename', 'raw_text', 'id', 'owner_id', 'upload_date'],
+    title: 'ResumePublic'
+} as const;
+
+export const ResumesPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/ResumePublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'ResumesPublic'
+} as const;
+
+export const SkillCategorySchema = {
+    properties: {
+        category: {
+            type: 'string',
+            title: 'Category',
+            description: "Skill category, e.g., 'Backend', 'Frontend', 'DevOps'"
+        },
+        skills: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Skills',
+            description: 'List of skills in this category'
+        }
+    },
+    type: 'object',
+    required: ['category', 'skills'],
+    title: 'SkillCategory',
+    description: 'Categorized skills from resume'
 } as const;
 
 export const TokenSchema = {
@@ -566,18 +917,6 @@ export const UserPublicSchema = {
             type: 'string',
             format: 'uuid',
             title: 'Id'
-        },
-        created_at: {
-            anyOf: [
-                {
-                    type: 'string',
-                    format: 'date-time'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Created At'
         }
     },
     type: 'object',

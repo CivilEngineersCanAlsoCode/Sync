@@ -9,8 +9,8 @@ from tests.utils.utils import random_lower_string
 def create_random_job(session: Session, owner_id: uuid.UUID) -> Job:
     title = random_lower_string()
     company = random_lower_string()
-    jd_text = random_lower_string()
-    job = Job(title=title, company=company, jd_text=jd_text, owner_id=owner_id)
+    description = random_lower_string()
+    job = Job(title=title, company=company, description=description, owner_id=owner_id, location="Remote", url="http://test.com")
     session.add(job)
     session.commit()
     session.refresh(job)
@@ -19,7 +19,7 @@ def create_random_job(session: Session, owner_id: uuid.UUID) -> Job:
 def test_create_job(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    data = {"title": "Foo", "company": "Bar", "jd_text": "Baz", "url": "http://google.com"}
+    data = {"title": "Foo", "company": "Bar", "description": "Baz", "url": "http://google.com", "location": "Remote"}
     response = client.post(
         f"{settings.API_V1_STR}/jobs/", headers=superuser_token_headers, json=data
     )
@@ -90,8 +90,8 @@ from tests.utils.user import authentication_token_from_email
 def create_job_with_status(session: Session, owner_id: uuid.UUID, status: str) -> Job:
     title = random_lower_string()
     company = random_lower_string()
-    jd_text = random_lower_string()
-    job = Job(title=title, company=company, jd_text=jd_text, owner_id=owner_id, status=status)
+    description = random_lower_string()
+    job = Job(title=title, company=company, description=description, owner_id=owner_id, status=status, location="Remote", url="http://test.com")
     session.add(job)
     session.commit()
     session.refresh(job)

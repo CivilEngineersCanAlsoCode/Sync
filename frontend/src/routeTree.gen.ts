@@ -22,6 +22,7 @@ import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
 import { Route as LayoutProfileIndexRouteImport } from './routes/_layout/profile/index'
 import { Route as LayoutJobsIndexRouteImport } from './routes/_layout/jobs/index'
 import { Route as LayoutJobsAddRouteImport } from './routes/_layout/jobs.add'
+import { Route as LayoutJobsJobIdRouteImport } from './routes/_layout/jobs/$jobId'
 import { Route as LayoutResumesResumeIdProfileRouteImport } from './routes/_layout/resumes.$resumeId.profile'
 import { Route as LayoutJobsJobIdAnalysisRouteImport } from './routes/_layout/jobs.$jobId.analysis'
 
@@ -89,6 +90,11 @@ const LayoutJobsAddRoute = LayoutJobsAddRouteImport.update({
   path: '/jobs/add',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutJobsJobIdRoute = LayoutJobsJobIdRouteImport.update({
+  id: '/jobs/$jobId',
+  path: '/jobs/$jobId',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutResumesResumeIdProfileRoute =
   LayoutResumesResumeIdProfileRouteImport.update({
     id: '/$resumeId/profile',
@@ -96,9 +102,9 @@ const LayoutResumesResumeIdProfileRoute =
     getParentRoute: () => LayoutResumesRoute,
   } as any)
 const LayoutJobsJobIdAnalysisRoute = LayoutJobsJobIdAnalysisRouteImport.update({
-  id: '/jobs/$jobId/analysis',
-  path: '/jobs/$jobId/analysis',
-  getParentRoute: () => LayoutRoute,
+  id: '/analysis',
+  path: '/analysis',
+  getParentRoute: () => LayoutJobsJobIdRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/items': typeof LayoutItemsRoute
   '/resumes': typeof LayoutResumesRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
+  '/jobs/$jobId': typeof LayoutJobsJobIdRouteWithChildren
   '/jobs/add': typeof LayoutJobsAddRoute
   '/jobs/': typeof LayoutJobsIndexRoute
   '/profile/': typeof LayoutProfileIndexRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/resumes': typeof LayoutResumesRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/jobs/$jobId': typeof LayoutJobsJobIdRouteWithChildren
   '/jobs/add': typeof LayoutJobsAddRoute
   '/jobs': typeof LayoutJobsIndexRoute
   '/profile': typeof LayoutProfileIndexRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/_layout/resumes': typeof LayoutResumesRouteWithChildren
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/jobs/$jobId': typeof LayoutJobsJobIdRouteWithChildren
   '/_layout/jobs/add': typeof LayoutJobsAddRoute
   '/_layout/jobs/': typeof LayoutJobsIndexRoute
   '/_layout/profile/': typeof LayoutProfileIndexRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/resumes'
     | '/settings'
+    | '/jobs/$jobId'
     | '/jobs/add'
     | '/jobs/'
     | '/profile/'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/resumes'
     | '/settings'
     | '/'
+    | '/jobs/$jobId'
     | '/jobs/add'
     | '/jobs'
     | '/profile'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/_layout/resumes'
     | '/_layout/settings'
     | '/_layout/'
+    | '/_layout/jobs/$jobId'
     | '/_layout/jobs/add'
     | '/_layout/jobs/'
     | '/_layout/profile/'
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutJobsAddRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/jobs/$jobId': {
+      id: '/_layout/jobs/$jobId'
+      path: '/jobs/$jobId'
+      fullPath: '/jobs/$jobId'
+      preLoaderRoute: typeof LayoutJobsJobIdRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/resumes/$resumeId/profile': {
       id: '/_layout/resumes/$resumeId/profile'
       path: '/$resumeId/profile'
@@ -313,10 +332,10 @@ declare module '@tanstack/react-router' {
     }
     '/_layout/jobs/$jobId/analysis': {
       id: '/_layout/jobs/$jobId/analysis'
-      path: '/jobs/$jobId/analysis'
+      path: '/analysis'
       fullPath: '/jobs/$jobId/analysis'
       preLoaderRoute: typeof LayoutJobsJobIdAnalysisRouteImport
-      parentRoute: typeof LayoutRoute
+      parentRoute: typeof LayoutJobsJobIdRoute
     }
   }
 }
@@ -333,16 +352,28 @@ const LayoutResumesRouteWithChildren = LayoutResumesRoute._addFileChildren(
   LayoutResumesRouteChildren,
 )
 
+interface LayoutJobsJobIdRouteChildren {
+  LayoutJobsJobIdAnalysisRoute: typeof LayoutJobsJobIdAnalysisRoute
+}
+
+const LayoutJobsJobIdRouteChildren: LayoutJobsJobIdRouteChildren = {
+  LayoutJobsJobIdAnalysisRoute: LayoutJobsJobIdAnalysisRoute,
+}
+
+const LayoutJobsJobIdRouteWithChildren = LayoutJobsJobIdRoute._addFileChildren(
+  LayoutJobsJobIdRouteChildren,
+)
+
 interface LayoutRouteChildren {
   LayoutAdminRoute: typeof LayoutAdminRoute
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutResumesRoute: typeof LayoutResumesRouteWithChildren
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutJobsJobIdRoute: typeof LayoutJobsJobIdRouteWithChildren
   LayoutJobsAddRoute: typeof LayoutJobsAddRoute
   LayoutJobsIndexRoute: typeof LayoutJobsIndexRoute
   LayoutProfileIndexRoute: typeof LayoutProfileIndexRoute
-  LayoutJobsJobIdAnalysisRoute: typeof LayoutJobsJobIdAnalysisRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
@@ -351,10 +382,10 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutResumesRoute: LayoutResumesRouteWithChildren,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutJobsJobIdRoute: LayoutJobsJobIdRouteWithChildren,
   LayoutJobsAddRoute: LayoutJobsAddRoute,
   LayoutJobsIndexRoute: LayoutJobsIndexRoute,
   LayoutProfileIndexRoute: LayoutProfileIndexRoute,
-  LayoutJobsJobIdAnalysisRoute: LayoutJobsJobIdAnalysisRoute,
 }
 
 const LayoutRouteWithChildren =

@@ -1,13 +1,22 @@
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 from sqlmodel import func, select
 
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Job, JobCreate, JobPublic, JobsPublic, JobStats, JobUpdate, Message
+from app.models import (
+    Job,
+    JobCreate,
+    JobPublic,
+    JobsPublic,
+    JobStats,
+    JobUpdate,
+    Message,
+)
+from app.services.probing_service import generate_probing_questions
 
 router = APIRouter(prefix="/jobs", tags=["jobs"])
 
@@ -83,16 +92,41 @@ def read_job(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> A
 # Ye endpoint specific job ID ki details fetch karta hai.
 
 
+
 @router.post("/", response_model=JobPublic)
 def create_job(
-    *, session: SessionDep, current_user: CurrentUser, job_in: JobCreate
+    *, 
+    session: SessionDep, 
+    current_user: CurrentUser, 
+    job_in: JobCreate,
+    background_tasks: BackgroundTasks
 ) -> Any:
     """
     Create new job.
     """
+    # Check for duplicates (AC 11)
+    statement = select(Job).where(
+        Job.title == job_in.title,
+        Job.company == job_in.company,
+        Job.owner_id == current_user.id,
+    )
+    existing_job = session.exec(statement).first()
+    if existing_job:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "Same details wala job pehle se exists karta hai",
+                "code": "DUPLICATE_JOB",
+            },
+        )
+
     job = crud.create_job(session=session, job_in=job_in, owner_id=current_user.id)
+    
+    # Trigger background probing questions (Story 2.2)
+    background_tasks.add_task(generate_probing_questions, job.id)
+    
     return job
-# Ye endpoint nayi job create karta hai aur user ko owner assign karta hai.
+# Ye endpoint nayi job create karta hai aur duplicate check bhi karta hai.
 
 
 @router.put("/{id}", response_model=JobPublic)

@@ -9,6 +9,76 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
+export type Body_resumes_upload_resume = {
+    file: (Blob | File);
+};
+
+/**
+ * Public response model for career profile
+ */
+export type CareerProfilePublic = {
+    /**
+     * AI provider used: 'gemini' or 'ollama'
+     */
+    ai_provider: string;
+    id: string;
+    resume_id: string;
+    owner_id: string;
+    projects: string;
+    experience: string;
+    skills: string;
+    extracted_at: string;
+};
+
+/**
+ * Public response model with structured data (not JSON strings).
+ */
+export type CareerProfileRead = {
+    /**
+     * AI provider used: 'gemini' or 'ollama'
+     */
+    ai_provider: string;
+    id: string;
+    resume_id: string;
+    owner_id: string;
+    projects: Array<Project>;
+    experience: Array<Experience>;
+    skills: Array<SkillCategory>;
+    extracted_at: string;
+};
+
+/**
+ * Update model for career profile.
+ * All fields are optional to allow partial updates.
+ */
+export type CareerProfileUpdate = {
+    projects?: (Array<Project> | null);
+    experience?: (Array<Experience> | null);
+    skills?: (Array<SkillCategory> | null);
+};
+
+/**
+ * Work experience entry from resume
+ */
+export type Experience = {
+    /**
+     * Company name
+     */
+    company: string;
+    /**
+     * Job title/role
+     */
+    role: string;
+    /**
+     * Time period, e.g., '2020-2023' or '2 years'
+     */
+    duration: string;
+    /**
+     * Key responsibilities and achievements
+     */
+    responsibilities: Array<(string)>;
+};
+
 export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
@@ -23,7 +93,6 @@ export type ItemPublic = {
     description?: (string | null);
     id: string;
     owner_id: string;
-    created_at?: (string | null);
 };
 
 export type ItemsPublic = {
@@ -39,21 +108,22 @@ export type ItemUpdate = {
 export type JobCreate = {
     title: string;
     company: string;
-    jd_text: string;
-    url?: (string | null);
-    status?: string;
+    url: string;
+    location: string;
+    description: string;
 };
 
 export type JobPublic = {
     title: string;
     company: string;
-    jd_text: string;
-    url?: (string | null);
-    status?: string;
+    url: string;
+    location: string;
+    description: string;
     id: string;
     owner_id: string;
+    status: string;
     created_at: (string | null);
-    updated_at: (string | null);
+    probing_questions: Array<ProbingQuestionPublic>;
 };
 
 export type JobsPublic = {
@@ -61,23 +131,42 @@ export type JobsPublic = {
     count: number;
 };
 
+export type JobStats = {
+    Draft?: number;
+    Applied?: number;
+    Shortlisted?: number;
+    Interviewing?: number;
+    Offered?: number;
+    Redirected?: number;
+    Waiting?: number;
+};
+
 export type JobUpdate = {
     title?: (string | null);
     company?: (string | null);
-    jd_text?: (string | null);
     url?: (string | null);
+    location?: (string | null);
+    description?: (string | null);
     status?: (string | null);
 };
 
-export type JobStats = {
-    Draft: number;
-    Applied: number;
-    Shortlisted: number;
-    Interviewing: number;
-    Offered: number;
-    Rejected: number;
-    Waiting: number;
+export type ProbingQuestionPublic = {
+    question_text: string;
+    answer?: (string | null);
+    id: string;
+    job_id: string;
 };
+
+export type ProbingQuestionUpdate = {
+    answer: string;
+};
+
+export type ProbingQuestionsUpdateQuestionData = {
+    id: string;
+    requestBody: ProbingQuestionUpdate;
+};
+
+export type ProbingQuestionsUpdateQuestionResponse = (ProbingQuestionPublic);
 
 export type Message = {
     message: string;
@@ -93,6 +182,55 @@ export type PrivateUserCreate = {
     password: string;
     full_name: string;
     is_verified?: boolean;
+};
+
+/**
+ * Individual project extracted from resume
+ */
+export type Project = {
+    /**
+     * Project name or title
+     */
+    title: string;
+    /**
+     * Brief description of what was built
+     */
+    description: string;
+    /**
+     * Technologies, languages, frameworks used
+     */
+    technologies: Array<(string)>;
+    /**
+     * Business impact or metrics if mentioned
+     */
+    impact?: (string | null);
+};
+
+export type ResumePublic = {
+    filename: string;
+    raw_text: string;
+    id: string;
+    owner_id: string;
+    upload_date: (string | null);
+};
+
+export type ResumesPublic = {
+    data: Array<ResumePublic>;
+    count: number;
+};
+
+/**
+ * Categorized skills from resume
+ */
+export type SkillCategory = {
+    /**
+     * Skill category, e.g., 'Backend', 'Frontend', 'DevOps'
+     */
+    category: string;
+    /**
+     * List of skills in this category
+     */
+    skills: Array<(string)>;
 };
 
 export type Token = {
@@ -119,7 +257,6 @@ export type UserPublic = {
     is_superuser?: boolean;
     full_name?: (string | null);
     id: string;
-    created_at?: (string | null);
 };
 
 export type UserRegister = {
@@ -184,6 +321,8 @@ export type ItemsDeleteItemData = {
 
 export type ItemsDeleteItemResponse = (Message);
 
+export type JobsReadJobStatsResponse = (JobStats);
+
 export type JobsReadJobsData = {
     limit?: number;
     skip?: number;
@@ -247,6 +386,50 @@ export type PrivateCreateUserData = {
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type ProfilesReadResumeProfileData = {
+    id: string;
+};
+
+export type ProfilesReadResumeProfileResponse = (CareerProfileRead);
+
+export type ProfilesUpdateResumeProfileData = {
+    id: string;
+    requestBody: CareerProfileUpdate;
+};
+
+export type ProfilesUpdateResumeProfileResponse = (CareerProfileRead);
+
+export type ResumesUploadResumeData = {
+    formData: Body_resumes_upload_resume;
+};
+
+export type ResumesUploadResumeResponse = (ResumePublic);
+
+export type ResumesReadResumesData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type ResumesReadResumesResponse = (ResumesPublic);
+
+export type ResumesReadResumeData = {
+    resumeId: string;
+};
+
+export type ResumesReadResumeResponse = (ResumePublic);
+
+export type ResumesDeleteResumeData = {
+    resumeId: string;
+};
+
+export type ResumesDeleteResumeResponse = (Message);
+
+export type ResumesExtractCareerProfileData = {
+    resumeId: string;
+};
+
+export type ResumesExtractCareerProfileResponse = (CareerProfilePublic);
 
 export type UsersReadUsersData = {
     limit?: number;
