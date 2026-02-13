@@ -29,6 +29,7 @@ def test_create_job(
     assert content["url"] == data["url"]
     assert "id" in content
     assert "owner_id" in content
+    assert content["status"] == "Draft"
 
 def test_read_job(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session, superuser: User

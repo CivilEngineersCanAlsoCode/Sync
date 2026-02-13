@@ -70,7 +70,7 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
 
 
 def create_job(*, session: Session, job_in: JobCreate, owner_id: uuid.UUID) -> Job:
-    db_job = Job.model_validate(job_in, update={"owner_id": owner_id, "status": "Applied"})
+    db_job = Job.model_validate(job_in, update={"owner_id": owner_id})
     session.add(db_job)
     session.commit()
     session.refresh(db_job)

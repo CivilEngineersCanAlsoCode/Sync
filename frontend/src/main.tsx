@@ -8,12 +8,12 @@ import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
 import { ApiError, OpenAPI } from "./client"
-import { ThemeProvider } from "./components/theme-provider"
+import { ThemeProvider } from "./components/Common/theme-provider"
 import { Toaster } from "./components/ui/sonner"
 import "./index.css"
 import { routeTree } from "./routeTree.gen"
 
-OpenAPI.BASE = "" // Always use relative path to route through nginx proxy
+OpenAPI.BASE = import.meta.env.VITE_API_URL as string
 OpenAPI.TOKEN = async () => {
   return localStorage.getItem("access_token") || ""
 }

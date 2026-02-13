@@ -41,9 +41,9 @@ tracking_system: file-system
 story_location: "/Users/satvikjain/Downloads/Resume personalisation/output/implementation-artifacts"
 
 development_status:
-  epic-1: backlog
-  1-1-create-job-entry-draft: backlog
-  1-2-job-dashboard-list-view: backlog
+  epic-1: in-progress
+  1-1-create-job-entry-draft: done
+  1-2-job-dashboard-list-view: in-progress
   1-3-job-actions-view-delete: backlog
   epic-1-retrospective: optional
 
@@ -62,3 +62,7 @@ development_status:
   4-1-tailored-resumes-list: backlog
   4-2-export-options-overleaf-pdf: backlog
   epic-4-retrospective: optional
+
+  epic-5: in-progress
+  5-1-code-organization-cleanup: ready-for-dev
+  epic-5-retrospective: optional

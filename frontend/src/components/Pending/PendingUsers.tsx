@@ -17,7 +17,7 @@ const PendingUsers = () => (
         <TableHead>Role</TableHead>
         <TableHead>Status</TableHead>
         <TableHead>
-          <span className="sr-only">Actions</span>
+          Actions
         </TableHead>
       </TableRow>
     </TableHeader>
