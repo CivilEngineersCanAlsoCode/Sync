@@ -7,13 +7,13 @@ inputDocuments:
   - output/planning-artifacts/ux-design-specification.md
 ---
 
-# Resume personalisation - Epic Breakdown (Release 1)
+# Resume personalisation - Epic Breakdown (Release 2)
 
 ## Overview
 
-This document provides the specific Release 1 epics for Resume personalisation, focusing on the "Probing & Generation Trigger" workflow.
+This document provides the specific Release 2 epics for Resume personalisation, focusing on the "Probing & Generation Trigger" workflow.
 
-## Requirements Inventory (Release 1 Focused)
+## Requirements Inventory (Release 2 Focused)
 
 ### Functional Requirements
 
